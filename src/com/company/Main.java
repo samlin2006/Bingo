@@ -14,7 +14,7 @@ public class Main {
         int seed = sc.nextInt();
 
          */
-        BingoPanel b = new BingoPanel(0);
+        BingoPanel b = new BingoPanel(123);
         image.add(b);
 
     }

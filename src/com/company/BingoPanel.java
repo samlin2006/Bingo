@@ -28,14 +28,24 @@ public class BingoPanel extends JPanel implements MouseListener {
     }
 
     public void paint(Graphics g) {
-        g.drawImage(BingoCard, 0, 0, 160,200, null);
+        g.drawImage(BingoCard, 0, 0,320,400, null);
         for(int r = 0; r < 5; r++){
             for(int c = 0; c < 5; c++){
-                g.drawString(Integer.toString(card.getTile(r,c).getNumber()), r * 27 + 20, c * 30 + 50);
+
+                if(card.getTile(r, c).isCrossed() == false) {
+                    g.drawString(Integer.toString(card.getTile(r, c).getNumber()), r * 54 + 40, c * 55 + 100);
+                } else {
+                    g.setColor(Color.red);
+                    g.drawString(Integer.toString(card.getTile(r, c).getNumber()), r * 54 + 40, c * 55 + 100);
+                }
             }
         }
-        g.setColor(Color.blue);
-        g.fillRect(0, 202, 158, 200);
+        g.setFont(new Font("Ariel",Font.PLAIN,  15));
+
+
+
+        g.drawString(Integer.toString(generate()), 500, 500);
+
     }
 
 
@@ -46,6 +56,7 @@ public class BingoPanel extends JPanel implements MouseListener {
         System.out.println(e.getY());
         System.out.println("************");
 
+        repaint();
 
     }
 
@@ -69,7 +80,7 @@ public class BingoPanel extends JPanel implements MouseListener {
 
     }
 
-    private ArrayList<Integer> existingNumbers;
+    private ArrayList<Integer> existingNumbers = new ArrayList<>();
     private static Random rand = new Random();
     private int generate(){
         int n;
@@ -81,7 +92,7 @@ public class BingoPanel extends JPanel implements MouseListener {
         return n;
     }
 
-    
+
 
 
 }
