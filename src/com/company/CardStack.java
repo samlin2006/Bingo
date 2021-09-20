@@ -45,10 +45,29 @@ public class CardStack {
         while(!gameOver()){
             drawNumber++;
         }
+        return drawNumber;
     }
 
+    public ArrayList<Integer> getWinnersIndexList(){
+        ArrayList<Integer> list = new ArrayList<>();
 
+        for(int i = 0; i < cards.size();i++){
+            if(cards.get(i).isBingo()){
+                list.add(i);
+            }
+        }
+        return list;
+    }
 
+    public int getCurrentWinnersCount() {
+        int count = 0;
+        for(Card c : cards){
+            if(c.isBingo()){
+                count++;
+            }
+        }
+        return count;
+    }
 
     private ArrayList<Integer> existingNumbers = new ArrayList<>();
 }

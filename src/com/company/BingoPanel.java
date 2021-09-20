@@ -42,9 +42,6 @@ public class BingoPanel extends JPanel implements MouseListener {
 
     }
 
-    public int [] partition(){
-        int numDraws =
-    }
 
     public void paint(Graphics g) {
         g.drawImage(BingoCard, 0, 0, 320, 400, null);
@@ -73,7 +70,7 @@ public class BingoPanel extends JPanel implements MouseListener {
         g.setColor(Color.orange);
         g.fillRect(321, 128, 166, 64);
         g.setColor(Color.white);
-        g.drawString("Card Index: " + cardIndex, 360, 150);
+        g.drawString("Card Index: "  + (1 + cardIndex),360, 150);
 
 
         g.setColor(Color.green);
@@ -127,7 +124,10 @@ public class BingoPanel extends JPanel implements MouseListener {
         //checking for bingo
         if (cards.getCard(cardIndex).isBingo()) {
             g.setColor(Color.green);
-            g.drawString("Bingo!", 600, 100);
+            g.drawString("Bingo!", 600,600);
+        } else{
+            g.setColor(Color.white);
+            g.fillRect(580,580,100,100);
         }
 
 
@@ -138,14 +138,14 @@ public class BingoPanel extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        System.out.println("x: " + e.getX() + "y: " + e.getY());
+        System.out.println("x: " + e.getX() + "      y: " + e.getY());
         System.out.println("************");
 
         if (x >= 321 && x <= 487 && y >= 0 && y <= 64 && cardIndex < numCards - 1) {
             cardIndex++;
         } else if (x >= 321 && x <= 487 && y >= 64 && y <= 128 && cardIndex > 0) {
             cardIndex--;
-        } else if (x >= 487 && x <= 653 && y >= 0 && y >= 64) {
+        } else if (x >= 487 && x <= 653 && y >= 0 && y <= 64) {
             int ball = generate();
             ballsRolled.add(ball);
         }
@@ -174,6 +174,7 @@ public class BingoPanel extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
 
     private ArrayList<Integer> existingNumbers = new ArrayList<>();
     private static Random rand = new Random();
