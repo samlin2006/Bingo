@@ -24,12 +24,22 @@ public class Card {
                     tile.setNumber(-1);
                     tile.setCrossed(true);
                 }
+
+
                 n = generateNumbers(r);
                 while (nums.contains(n)) {
                     n = generateNumbers(r);
                 }
                 nums.add(n);
                 tile.setNumber(n);
+            }
+        }
+    }
+
+    public void clearCard(){
+        for(int r = 0; r < 5; r++){
+            for(int c = 0; c < 5; c++){
+                ray[r][c].setCrossed(false);
             }
         }
     }
@@ -42,60 +52,48 @@ public class Card {
         return ray[r][c];
     }
 
-    public boolean isBingo() {
-        boolean rowBingo = true;
-        boolean columnBingo = true;
-        boolean diagnalBingo = true;
-        boolean diagnalBingo2 = true;
-        for (int r = 0; r < ray.length; r++) {
-            if (!rowBingo(ray[r])) {
-                rowBingo = false;
-            }
+    public boolean isBingo(){
+        //row
+        if(ray[0][0].isCrossed() && ray[0][1].isCrossed() && ray[0][2].isCrossed() && ray[0][3].isCrossed() && ray[0][4].isCrossed()){
+            return true;
         }
-        for(int c = 0; c < ray.length; c++){
-            Tile [] temp2 = getColumn(ray, c);
-            if(!rowBingo(temp2)){
-                columnBingo =  false;
-            }
+        if(ray[1][0].isCrossed() && ray[1][1].isCrossed() && ray[1][2].isCrossed() && ray[1][3].isCrossed() && ray[1][4].isCrossed()){
+            return true;
         }
-        for(int i = 0; i < 5; i++){
-            if(!ray[i][i].isCrossed()){
-                diagnalBingo = false;
-            }
+        if(ray[2][0].isCrossed() && ray[2][1].isCrossed() && ray[2][2].isCrossed() && ray[2][3].isCrossed() && ray[2][4].isCrossed()){
+            return true;
+        }
+        if(ray[3][0].isCrossed() && ray[3][1].isCrossed() && ray[3][2].isCrossed() && ray[3][3].isCrossed() && ray[3][4].isCrossed()){
+            return true;
+        }
+        if(ray[4][0].isCrossed() && ray[4][1].isCrossed() && ray[4][2].isCrossed() && ray[4][3].isCrossed() && ray[4][4].isCrossed()){
+            return true;
+        }
+        //column
+        if(ray[0][0].isCrossed() && ray[1][0].isCrossed() && ray[2][0].isCrossed() && ray[3][0].isCrossed() && ray[4][0].isCrossed()){
+            return true;
+        }
+        if(ray[0][1].isCrossed() && ray[1][1].isCrossed() && ray[2][1].isCrossed() && ray[3][1].isCrossed() && ray[4][1].isCrossed()){
+            return true;
+        }
+        if(ray[0][2].isCrossed() && ray[1][2].isCrossed() && ray[2][2].isCrossed() && ray[3][2].isCrossed() && ray[4][2].isCrossed()){
+            return true;
+        }
+        if(ray[0][3].isCrossed() && ray[1][3].isCrossed() && ray[2][3].isCrossed() && ray[3][3].isCrossed() && ray[4][3].isCrossed()){
+            return true;
+        }
+        if(ray[0][4].isCrossed() && ray[1][4].isCrossed() && ray[2][4].isCrossed() && ray[3][4].isCrossed() && ray[4][4].isCrossed()){
+            return true;
         }
 
-        for(int r = 0; r < 5; r++){
-            int c = 4;
-            if(!ray[r][c].isCrossed()){
-                diagnalBingo2 = false;
-            }
-            c--;
+        //diagnals
+        if(ray[0][0].isCrossed() && ray[1][1].isCrossed() && ray[3][3].isCrossed() && ray[4][4].isCrossed()){
+            return true;
         }
-        return (rowBingo || columnBingo || diagnalBingo || diagnalBingo2);
+        if(ray[0][4].isCrossed() && ray[1][3].isCrossed() && ray[3][1].isCrossed() && ray[4][0].isCrossed()){
+            return true;
+        }
+        return false;
     }
 
-    public boolean rowBingo(Tile[] tiles) {
-        boolean temp = true;
-        for (int i = 0; i < tiles.length; i++) {
-            if (!tiles[i].isCrossed()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Tile [] getColumn(Tile [][] t, int c){
-        Tile column [] = new Tile[5]
-        for(int i = 0; i < t[0].length; i++){
-            column [i] = t[i][c];
-        }
-        return column;
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                ", ray=" + Arrays.toString(ray) +
-                '}';
-    }
 }

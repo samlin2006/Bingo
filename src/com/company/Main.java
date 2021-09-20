@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        FirstImage image = new FirstImage("Bingo");
+        BingoFrame image = new BingoFrame("Bingo");
         /*
         Scanner sc = new Scanner(System.in);
         System.out.println("Input seed");
@@ -14,8 +14,8 @@ public class Main {
         int seed = sc.nextInt();
 
          */
-        BingoPanel b = new BingoPanel(123);
-        image.add(b);
+        //BingoPanel b = new BingoPanel(123);
+       // image.add(b);
 
     }
 }
