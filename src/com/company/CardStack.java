@@ -8,23 +8,21 @@ public class CardStack {
     private ArrayList<Card> cards = new ArrayList<>();
     private Random rand;
     private int numWinners;
+    private int days;
 
 
 
-    public CardStack(int numCards, int seed, int numWinners){
+    public CardStack(int numCards, int seed, int numWinners, int days){
         rand = new Random(seed);
         for(int i = 0; i < numCards; i++){
-            cards.add(new Card(seed + rand.nextInt()));
+            int nextRand = generate();
+            cards.add(new Card(seed + nextRand));
+
         }
         this.numWinners = numWinners;
+        this.days = days;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-    public Card getCard(int index){
-        return cards.get(index);
-    }
 
 
     public boolean gameOver(){
@@ -40,15 +38,43 @@ public class CardStack {
         return false;
     }
 
-    public int getNumDraws(){
-        int drawNumber = 0;
-        while(!gameOver()){
-            drawNumber++;
+
+    public ArrayList<Integer> getWinnersIndexList(){
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for(int i = 0; i < cards.size();i++){
+            if(cards.get(i).isBingo()){
+                list.add(i);
+            }
         }
+        return list;
     }
 
+    public int getCurrentWinnersCount() {
+        int count = 0;
+        for(Card c : cards){
+            if(c.isBingo()){
+                count++;
+            }
+        }
+        return count;
+    }
 
+    private int generate(){
+        int nextRand = rand.nextInt();
+        while(existingNumbers2.contains(nextRand)){
+            nextRand = rand.nextInt();
+        }
+        existingNumbers2.add(nextRand);
+        return nextRand;
+    }
+    private ArrayList<Integer> existingNumbers2 = new ArrayList<>();
 
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+    public Card getCard(int index){
+        return cards.get(index);
+    }
 
-    private ArrayList<Integer> existingNumbers = new ArrayList<>();
 }

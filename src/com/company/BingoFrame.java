@@ -25,20 +25,5 @@ public class BingoFrame extends JFrame {
 
     }
 
-    public static int getBingoCards() {
-        return bingoCards;
-    }
-
-    public static int getDays() {
-        return days;
-    }
-
-    public static int getSeed() {
-        return seed;
-    }
-    public static int getWinners(){
-        return winners;
-    }
-
 
 }

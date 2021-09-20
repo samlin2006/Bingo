@@ -2,8 +2,9 @@ package com.company;
 
 import java.util.*;
 import java.io.*;
-
 public class Export {
+
+    /*
     public static void printList(ArrayList<Integer> balls) {
         FileWriter f;
         try {
@@ -20,4 +21,6 @@ public class Export {
     }
 
     public static void printCards(CardSt)
+
+     */
 }

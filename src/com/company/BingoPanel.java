@@ -19,6 +19,10 @@ public class BingoPanel extends JPanel implements MouseListener {
     private int numCards;
     private ArrayList<Integer> ballsRolled = new ArrayList<>();
     private int numDays;
+    private int ballsCount = 0;
+    private ArrayList<Integer> AM = new ArrayList<>();
+    private ArrayList<Integer> PM = new ArrayList<>();
+
 
     public BingoPanel(int seed, int days, int numWinners, int numCards) {
 
@@ -34,19 +38,17 @@ public class BingoPanel extends JPanel implements MouseListener {
             return;
         }
 
-        cards = new CardStack(numCards, seed, numWinners);
+        cards = new CardStack(numCards, seed, numWinners, days);
         this.numCards = numCards;
+        numDays = days;
         repaint();
 
 
-
     }
 
-    public int [] partition(){
-        int numDraws =
-    }
 
     public void paint(Graphics g) {
+
         g.drawImage(BingoCard, 0, 0, 320, 400, null);
         g.setFont(new Font("Ariel", Font.PLAIN, 15));
         g.setColor(Color.white);
@@ -54,7 +56,7 @@ public class BingoPanel extends JPanel implements MouseListener {
 
 
         g.setColor(Color.black);
-        g.fillRect(660,0, 200, 200);
+        g.fillRect(660, 0, 200, 200);
         g.setColor(Color.white);
         g.drawString("Export", 700, 100);
 
@@ -73,7 +75,7 @@ public class BingoPanel extends JPanel implements MouseListener {
         g.setColor(Color.orange);
         g.fillRect(321, 128, 166, 64);
         g.setColor(Color.white);
-        g.drawString("Card Index: " + cardIndex, 360, 150);
+        g.drawString("Card Index: " + (1 + cardIndex), 360, 150);
 
 
         g.setColor(Color.green);
@@ -104,7 +106,7 @@ public class BingoPanel extends JPanel implements MouseListener {
         g.drawString(Integer.toString(ballsRolled.get(ballsRolled.size() - 1)), 500, 500);
 
         for (int i = 0; i < ballsRolled.size(); i++) {
-            g.drawString(Integer.toString(ballsRolled.get(i)), 30 * ((1 + i)%(getWidth()/30)) , 700 + i/(getWidth()/30) * 30);
+            g.drawString(Integer.toString(ballsRolled.get(i)), 30 * ((1 + i) % (getWidth() / 30)), 700 + i / (getWidth() / 30) * 30);
         }
 
         //checking if ball equals a tile in bingo
@@ -120,14 +122,56 @@ public class BingoPanel extends JPanel implements MouseListener {
         }
 
 
-
-
-
-
         //checking for bingo
         if (cards.getCard(cardIndex).isBingo()) {
             g.setColor(Color.green);
-            g.drawString("Bingo!", 600, 100);
+            g.drawString("Bingo!", 600, 600);
+        } else {
+            g.setColor(Color.white);
+            g.fillRect(580, 580, 100, 100);
+        }
+        int currentWinCount = cards.getCurrentWinnersCount();
+
+        g.setColor(Color.white);
+        g.fillRect(780, 780, 200, 100);
+        g.setColor(Color.black);
+        g.drawString("WinnersCount :" + cards.getCurrentWinnersCount(), 800, 800);
+
+
+        //check if round is over and calculating days
+        if (cards.gameOver()) {
+            g.setColor(Color.pink);
+            g.drawString("Game Over!", 750, 750);
+
+            //calculating days
+
+            int ballsCountCopy = ballsCount;
+            int ballsEachRound = ballsCount / (numDays * 2);
+
+            while (ballsCountCopy >= ballsEachRound) {
+                AM.add(ballsEachRound);
+                ballsCountCopy -= ballsEachRound;
+                if (!(ballsCountCopy >= ballsEachRound)) {
+                    PM.add(ballsEachRound);
+                    ballsCountCopy -= ballsEachRound;
+                }
+            }
+
+            int extraBalls = ballsCount % (numDays * 2);
+            int index = 0;
+            while (extraBalls != 0) {
+                AM.set(index, ballsEachRound + 1);
+                extraBalls--;
+                if (extraBalls != 0) {
+                    PM.set(index, ballsEachRound + 1);
+                    extraBalls--;
+                }
+                index++;
+            }
+
+
+        } else {
+            ballsCount++;
         }
 
 
@@ -138,17 +182,18 @@ public class BingoPanel extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        System.out.println("x: " + e.getX() + "y: " + e.getY());
+        System.out.println("x: " + e.getX() + "      y: " + e.getY());
         System.out.println("************");
 
         if (x >= 321 && x <= 487 && y >= 0 && y <= 64 && cardIndex < numCards - 1) {
             cardIndex++;
         } else if (x >= 321 && x <= 487 && y >= 64 && y <= 128 && cardIndex > 0) {
             cardIndex--;
-        } else if (x >= 487 && x <= 653 && y >= 0 && y >= 64) {
+        } else if (x >= 487 && x <= 653 && y >= 0 && y <= 64) {
             int ball = generate();
             ballsRolled.add(ball);
         }
+
 
         repaint();
 
@@ -175,6 +220,7 @@ public class BingoPanel extends JPanel implements MouseListener {
 
     }
 
+
     private ArrayList<Integer> existingNumbers = new ArrayList<>();
     private static Random rand = new Random();
 
@@ -186,6 +232,16 @@ public class BingoPanel extends JPanel implements MouseListener {
         }
         existingNumbers.add(n);
         return n;
+    }
+
+    //calculating days
+
+    private int getNumDraws() {
+        int drawNumber = 0;
+        while (!cards.gameOver()) {
+            drawNumber++;
+        }
+        return drawNumber;
     }
 
 
